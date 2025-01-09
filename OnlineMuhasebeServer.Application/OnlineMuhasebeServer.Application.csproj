@@ -3,7 +3,22 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\AppFeatures\CompanyFeatures\Queries\" />
+    <Folder Include="Features\CompanyFeatures\" />
+    <Folder Include="Services\CompanyServices\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineMuhasebeServer.Domain\OnlineMuhasebeServer.Domain.csproj" />
+  </ItemGroup>
 
 </Project>
