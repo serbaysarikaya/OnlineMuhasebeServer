@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using OnlineMuhasebeServer.Domain.AppEntities.Identity;
-using OnlineMuhasebeServer.WebApi.Configurations; // DI extension'ýn bulunduðu namespace
+using OnlineMuhasebeServer.WebApi.Configurations;
+using OnlineMuhasebeServer.WebApi.Middleware; // DI extension'ýn bulunduðu namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionMiddleware();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

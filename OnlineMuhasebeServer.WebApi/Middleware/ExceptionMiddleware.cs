@@ -1,5 +1,5 @@
 ﻿
-using System.Text.Json;
+using FluentValidation;
 
 namespace OnlineMuhasebeServer.WebApi.Middleware
 {
@@ -18,18 +18,25 @@ namespace OnlineMuhasebeServer.WebApi.Middleware
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
+        private Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)StatusCodes.Status500InternalServerError;
+            //context.Response.StatusCode = (int)StatusCodes.Status500InternalServerError;
 
-            var errorResult = new ErrorResult
+            if (ex.GetType() == typeof(ValidationException))
+            {
+                return context.Response.WriteAsync(new ValidationErrorDetails
+                {
+                    Errors = ((ValidationException)ex).Errors.Select(s => s.PropertyName),
+                    StatusCode = context.Response.StatusCode
+                }.ToString());
+            }
+
+            return context.Response.WriteAsync(new ErrorResult
             {
                 Message = ex.Message,
                 StatusCode = context.Response.StatusCode
-            };
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(errorResult)); // System.Text.Json ile
+            }.ToString());
         }
     }
 }

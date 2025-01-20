@@ -1,23 +1,23 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineMuhasebeServer.Application.Abstractions;
+using OnlineMuhasebeServer.Application.Messaging;
 using OnlineMuhasebeServer.Domain.AppEntities.Identity;
 
 namespace OnlineMuhasebeServer.Application.Features.AppFeatures.AppUserFeatures.Login
 {
-    public sealed class LoginHandler : IRequestHandler<LoginRequest, LoginResponse>
+    public sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginCommandResponse>
     {
         private readonly IJwtProvider _jwtProvider;
         private readonly UserManager<AppUser> _userManager;
 
-        public LoginHandler(IJwtProvider jwtProvider, UserManager<AppUser> userManager)
+        public LoginCommandHandler(IJwtProvider jwtProvider, UserManager<AppUser> userManager)
         {
             _jwtProvider = jwtProvider;
             _userManager = userManager;
         }
 
-        public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
+        public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             AppUser user = await _userManager.Users
                 .Where(p => p.Email == request.EmailOrUserName
@@ -29,13 +29,11 @@ namespace OnlineMuhasebeServer.Application.Features.AppFeatures.AppUserFeatures.
             if (!checkUser) throw new Exception("Şifreniz Yanlış");
             List<string> roles = new();
 
-            LoginResponse response = new LoginResponse()
-            {
-                EMail = user.Email,
-                NameLastName = user.NameLastName,
-                UserId = user.Id,
-                Token = await _jwtProvider.CreateTokenAsyn(user, roles)
-            };
+            LoginCommandResponse response = new(
+                user.Email,
+                user.NameLastName,
+                user.Id,
+           await _jwtProvider.CreateTokenAsyn(user, roles));
 
             return response;
         }

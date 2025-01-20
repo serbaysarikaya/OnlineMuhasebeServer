@@ -12,9 +12,9 @@ namespace OnlineMuhasebeServer.Presentation.Controller
         {
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateCompany(CreateCompanyRequest request)
+        public async Task<IActionResult> CreateCompany(CreateCompanyCommand request)
         {
-            CreateCompanyResponse response = await _mediator.Send(request);
+            CreateCompanyCommandResponse response = await _mediator.Send(request);
 
             return Ok(response);
         }
@@ -22,8 +22,8 @@ namespace OnlineMuhasebeServer.Presentation.Controller
         [HttpGet("[action]")]
         public async Task<IActionResult> MigrateCompanyDatabases()
         {
-            MigrateCompanyDatabasesRequest request = new();
-            MigrateCompanyDatabasesResponse respunse = await _mediator.Send(request);
+            MigrateCompanyDatabasesCommand request = new();
+            MigrateCompanyDatabasesCommandResponse respunse = await _mediator.Send(request);
 
             return Ok(respunse);
         }

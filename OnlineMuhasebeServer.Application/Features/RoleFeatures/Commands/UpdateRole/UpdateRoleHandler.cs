@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using OnlineMuhasebeServer.Application.Messaging;
 using OnlineMuhasebeServer.Application.Services.AppServices;
 using OnlineMuhasebeServer.Domain.AppEntities.Identity;
 
 namespace OnlineMuhasebeServer.Application.Features.RoleFeatures.Commands.UpdateRole
 {
-    internal class UpdateRoleHandler : IRequestHandler<UpdateRoleRequest, UpdateRoleResponse>
+    internal class UpdateRoleHandler : ICommandHandler<UpdateRoleCommand, UpdateRoleResponse>
     {
         private readonly IRoleService _roleService;
 
@@ -13,7 +13,7 @@ namespace OnlineMuhasebeServer.Application.Features.RoleFeatures.Commands.Update
             _roleService = roleService;
         }
 
-        public async Task<UpdateRoleResponse> Handle(UpdateRoleRequest request, CancellationToken cancellationToken)
+        public async Task<UpdateRoleResponse> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
             AppRole role = await _roleService.GetById(request.Id);
 
